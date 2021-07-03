@@ -20,17 +20,17 @@ int main()
 	cout.tie(NULL);
 
 	string s;
-	int result = 1;
-	cin >> s;
-	for (int i = 0; i < s.length(); i++)
+	cin >> s; 
+	int result = s[0] - '0';
+	for (int i = 1; i < s.length(); i++)
 	{
+		int num = s[i] - '0';
 		//0이 아닌 경우엔 무조건 곱하는게 가장 크므로
-		if (s[i] - '0' == 0)
-			continue;
+		if (num <= 1 || result <= 1)
+			result += num;
 		else
-		{
-			result *= (s[i] - '0');
-		}
+			result *= num;
+		
 	}
 	cout << result << endl;
 }
