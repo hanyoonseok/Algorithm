@@ -1,0 +1,37 @@
+# 프로그래머스 두 개 뽑아서 더하기 level1 
+`조합`
+---
+### 전체코드 
+```jsx
+vector<int> solution(vector<int> numbers) {
+	vector<int> answer;
+	vector<int> ZeroOrOne;
+	int n = numbers.size();
+	
+	for (int i = 0; i < 2; i++) {
+		ZeroOrOne.push_back(1);
+	}
+	// n-m개의 0 추가
+	for (int i = 0; i < n - 2; i++) {
+		ZeroOrOne.push_back(0);
+	}
+	// 정렬
+	sort(ZeroOrOne.begin(), ZeroOrOne.end());
+
+	//순열
+	do {
+		// 출력
+		for (int i = 0; i < ZeroOrOne.size(); i++) {
+			int total = 0;
+			if (ZeroOrOne[i] == 1) {
+				total += numbers[i];
+			}
+			answer.push_back(total);
+			cout << numbers[i] << ' ';
+		}cout << endl;
+	} while (next_permutation(ZeroOrOne.begin(), ZeroOrOne.end()));
+
+	answer.erase(unique(answer.begin(), answer.end()), answer.end());
+	return answer;
+}
+```
