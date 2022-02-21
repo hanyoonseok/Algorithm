@@ -5,7 +5,7 @@
 - bfs를 도는 depth를 기록해둘 필요가 있어서 이를 또 나타내는 `Info` 클래스도 선언해주고 사용했다. 한 노드에서 다른 자식노드로 전진할 때 이번 depth에서 나온 최대값을 갱신해주고, 새로운 depth가 갱신될 때 또한 최대값을 갱신한 값으로 바꿔주었다.
 - 최대값 갱신과 maxDepth 관련 로직이 복잡해서 조금 헤매긴 했는데 그래도 bfs로 이 문제를 해결하는 것이 직관적이어서 해결 가능하긴 했다.
 
-### 전체코드 BFS ver.
+### 전체코드 BFS 인접 리스트 ver.
 ```java
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -84,5 +84,75 @@ public class S1238 {
 		}
 	}
 
+}
+```
+
+### 전체코드 BFS 인접 행렬 ver.
+```java
+//SWEA 1238 SW 문제해결 기본 10일차 - Contact BFS ver. + 인접 행렬 ver.
+public class S1238_3 {
+	static int N,S; //입력받을 수, 시작 노드
+	static boolean check[]; //사용 여부
+	static boolean link [][]; //i번과 j번 연결 여부
+	static int ans = 0;
+	
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		for(int t=1; t<=10; t++) {
+			String [] NS = br.readLine().split(" ");
+			StringBuilder sb = new StringBuilder("#");
+			N = Integer.parseInt(NS[0]);
+			S = Integer.parseInt(NS[1]);
+			link = new boolean [101][101];
+			check = new boolean [101];
+			
+			String [] input = br.readLine().split(" ");
+			
+			for(int i=0; i<N; i+=2) {
+				int start = Integer.parseInt(input[i]);
+				int end = Integer.parseInt(input[i+1]);
+				link[start][end] = true;
+			}
+			
+			bfs(S);
+			
+			System.out.println(sb.append(t).append(" ").append(ans));
+		}
+	}
+	
+	static void bfs(int s) {
+		Queue<Info> q = new LinkedList<>();
+		q.add(new Info(s, 0));
+		ans = s; //이번 depth에서 최대값
+		int maxDepth = 0; //이번 depth
+		check[s] = true;
+		
+		while(!q.isEmpty()) {
+			Info current = q.poll();
+			
+			if(maxDepth < current.depth) { //새로운 depth 진입시 갱신
+				maxDepth = current.depth;
+				ans = current.num;
+			}
+			
+			ans = Math.max(ans,  current.num);
+			
+			for(int i=0; i<100; i++) {
+				if(check[i]) continue;
+				if(link[current.num][i]) { //연결되어 있으면
+					q.add(new Info(i, current.depth+1));
+					check[i] = true;
+				}
+			}
+		}
+	}
+	
+	static class Info{
+		int num, depth;
+		public Info(int num, int depth) {
+			this.num = num;
+			this.depth = depth;
+		}
+	}
 }
 ```
